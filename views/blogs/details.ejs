@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header.ejs') %>
+
+    <body>
+
+        <%- include('../partials/nav.ejs') %>
+            <div class="details content">
+                <% if(blog.title) { %>
+                    <h2 class="title">
+                        <%= blog.title %>
+                    </h2>
+                    <div class="content">
+                        <p class="body">
+                            <%= blog.body %>
+                        </p>
+                    </div>
+                    <% } else { %>
+                        <h3>no content to display ...</h3>
+                        <% }%>
+                            <div>
+                                <a class="delete" data-doc="<%= blog._id %> ">
+                                    <img src="/delete.svg" alt="delete icon" />
+                                </a>
+                            </div>
+            </div>
+            <%- include('../partials/footer.ejs') %>
+                <script>
+                    const trashcan = document.querySelector('a.delete');
+                    trashcan.addEventListener('click', (event) => {
+                        const item = `/blogs/${trashcan.dataset.doc}`;
+                        fetch(item, {
+                                method: 'delete'
+                            }).then((response) => response.json()).then((data) => {
+                                window.location.href = data.redirect;
+                                //console.log(data);
+                            })
+                            .catch((err) => {
+                                console.error(err)
+                            })
+                    })
+                </script>
+    </body>
+
+</html>
